@@ -1,0 +1,223 @@
+<link rel="import" href="../neon-animation/neon-animated-pages.html">
+<link rel="import" href="../neon-animation/neon-animatable.html">
+<link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../iron-input/iron-input.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
+<link rel="import" href="../paper-input/paper-input-behavior.html">
+<link rel="import" href="../paper-input/paper-input-char-counter.html">
+<link rel="import" href="../paper-input/paper-input-container.html">
+<link rel="import" href="../paper-input/paper-input-error.html">
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+A line of text that turns into a paper-input on tap. 
+
+After typing something in the paper-input and then blur the element or press enter, the element fire 'rename' event and turns back into the 'text state' with the updated value.
+
+If you press 'escape' without typing anything in the input, it  turns back into the 'text state' and reset the initial value.
+
+Exemple :
+    
+    <paper-input-rename></paper-input-rename>
+
+@group Paper Elements
+@element paper-input-rename
+@hero hero.svg
+@demo demo/index.html
+-->
+
+<dom-module id="paper-input-rename">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+        height: 28px;
+        @apply(--paper-font-common-base);
+      }
+      :host:focus {
+        outline: none;
+      }
+      input::-webkit-input-placeholder {
+        color: var(--paper-input-container-color, --secondary-text-color);
+      }
+      input:-moz-placeholder {
+        color: var(--paper-input-container-color, --secondary-text-color);
+      }
+      input::-moz-placeholder {
+        color: var(--paper-input-container-color, --secondary-text-color);
+      }
+      input:-ms-input-placeholder {
+        color: var(--paper-input-container-color, --secondary-text-color);
+      }
+      #inputContainer {
+        display: none;
+        @apply(--layout-fit);
+        padding: 0;
+      }
+      #text {
+        @apply(--layout-fit);
+        margin-top: 2px;
+        cursor: pointer;
+      }
+    </style>
+
+    <paper-input-container
+      id="inputContainer"
+      no-label-float="[[noLabelFloat]]"
+      always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
+      auto-validate$="[[autoValidate]]"
+      disabled$="[[disabled]]"
+      invalid="[[invalid]]">
+
+      <content select="[prefix]"></content>
+
+      <label hidden$="[[!label]]">[[label]]</label>
+
+      <input is="iron-input" id="input"
+        aria-labelledby$="[[_ariaLabelledBy]]"
+        aria-describedby$="[[_ariaDescribedBy]]"
+        disabled$="[[disabled]]"
+        bind-value="{{inputValue}}"
+        invalid="{{invalid}}"
+        prevent-invalid-input="[[preventInvalidInput]]"
+        allowed-pattern="[[allowedPattern]]"
+        validator="[[validator]]"
+        type$="[[type]]"
+        pattern$="[[pattern]]"
+        required$="[[required]]"
+        autocomplete$="[[autocomplete]]"
+        autofocus$="[[autofocus]]"
+        inputmode$="[[inputmode]]"
+        minlength$="[[minlength]]"
+        maxlength$="[[maxlength]]"
+        min$="[[min]]"
+        max$="[[max]]"
+        step$="[[step]]"
+        name$="[[name]]"
+        placeholder$="[[value]]"
+        readonly$="[[readonly]]"
+        list$="[[list]]"
+        size$="[[size]]"
+        autocapitalize$="[[autocapitalize]]"
+        autocorrect$="[[autocorrect]]"
+        autosave$="[[autosave]]"
+        results$="[[results]]"
+        accept$="[[accept]]"
+        multiple$="[[multiple]]">
+
+      <content select="[suffix]"></content>
+
+      <template is="dom-if" if="[[errorMessage]]">
+        <paper-input-error>[[errorMessage]]</paper-input-error>
+      </template>
+
+      <template is="dom-if" if="[[charCounter]]">
+        <paper-input-char-counter></paper-input-char-counter>
+      </template>
+
+    </paper-input-container>
+
+    <div id="text" on-tap="openInput">[[value]]</div>
+
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'paper-input-rename',
+    properties: {
+      _aborted: {
+        type: Boolean,
+        value: false
+      },
+      noLabelFloat: {
+        value: true
+      },
+      inputState: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        observer: '_inputStateChange'
+      },
+      animationConfig: {
+        value: function() {
+          return {
+            'entry': [{
+              name: 'fade-in-animation',
+              node: this.$.inputContainer
+            },{
+              name: 'fade-out-animation',
+              node: this.$.text
+            }],
+            'exit': [{
+              name: 'fade-in-animation',
+              node: this.$.text
+            },{
+              name: 'fade-out-animation',
+              node: this.$.inputContainer
+            }]
+          }
+        }
+      },
+      inputValue: {
+        type: String,
+        value: ''
+      }
+    },
+    behaviors: [
+      Polymer.IronFormElementBehavior,
+      Polymer.NeonAnimationRunnerBehavior,
+      Polymer.PaperInputBehavior
+    ],
+    keyBindings: {
+      'enter': '_confirm',
+      'esc': '_abort'
+    },
+    listeners: {
+      'neon-animation-finish': '_computeDisplay',
+      'input.blur': '_onBlurInput'
+    },
+    _inputStateChange: function(inputState) {
+      if (inputState) {
+        this.$.inputContainer.style.display = 'block';
+        this.inputValue = '';
+        this.playAnimation('entry');
+        this.$.input.focus();
+      } else {
+        this.$.text.style.display = 'block';
+        this.playAnimation('exit');
+      }
+    },
+    openInput: function() {
+      this.inputState = true;
+    },
+    _computeDisplay: function(e) {
+      if (this.inputState) {
+        this.$.text.style.display = 'none';
+        this.$.inputContainer.style.display = 'block';
+      } else {
+        this.$.text.style.display = 'block';
+        this.$.inputContainer.style.display = 'none';
+      }
+    },
+    _abort: function () {
+      this._aborted = true;
+      this.$.input.blur();
+    },
+    _confirm: function () {
+      this.$.input.blur();
+    },
+    _onBlurInput: function() {
+      if (!this._aborted && this.inputValue) {
+        this.value = this.inputValue;
+        this.fire('rename', this.value);
+      }
+      this.inputState = false;
+      this._aborted = false;
+    }
+  });
+</script>

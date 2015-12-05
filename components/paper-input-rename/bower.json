@@ -1,0 +1,31 @@
+{
+  "name": "paper-input-rename",
+  "version": "1.0.0",
+  "authors": [
+    "Zecat <jullienfelix@gmail.com>"
+  ],
+  "description": "A line of text that turns into a paper-input on tap.",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "seed"
+  ],
+  "main": "paper-input-rename.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/Zecat/paper-input-rename/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.0",
+    "paper-input": "PolymerElements/paper-input#~1.1.1",
+    "neon-animation": "PolymerElements/neon-animation#~1.0.8",
+    "iron-form-element-behavior": "PolymerElements/iron-form-element-behavior#~1.0.5",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#~1.2.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

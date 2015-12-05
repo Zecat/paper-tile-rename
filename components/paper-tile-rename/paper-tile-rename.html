@@ -1,0 +1,128 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-image/iron-image.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-input-rename/paper-input-rename.html">
+<link rel="import" href="../paper-styles/typography.html">
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+Material tile with rename feature. Convenient for backend photo gallery.
+
+Example:
+
+    <paper-tile-rename></paper-tile-rename>
+
+@group Paper Elements
+@element paper-tile-rename
+@demo demo/index.html
+@hero hero.svg
+-->
+<dom-module id="paper-tile-rename">
+
+  <template>
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+        @apply(--paper-font-common-base);
+        cursor: pointer;
+      }
+      iron-image {
+        width: 180px;
+        height: 180px;
+      }
+      :host[footer-content] iron-image {
+        @apply(--layout-vertical);
+        @apply(--layout-end-justified);
+      }
+      #content {
+        color: var(--paper-tile-color, white);
+        height: 48px;
+        background: var(--paper-tile-background, rgba(0,0,0,0.5));
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        cursor: default;
+      }
+      paper-icon-button {
+        padding: 12px;
+        width: 48px;
+        height: 48px;
+      }
+      #title {
+        font-weight: 500;
+        font-size: 16px;
+      }
+      paper-input-rename {
+        @apply(--layout-flex);
+        margin-left: 16px;
+        --paper-input-container-input: {
+          font-size: 16px;
+          font-weight: 500;
+          color: var(--paper-tile-color, white);
+        };
+        --paper-input-container-focus-color: white;
+        --paper-input-container-color: rgba(255, 255, 255, 0.7);
+      }
+    </style>
+    
+    <iron-image src="[[img]]" sizing="cover" on-tap="_primaryActionTaped">
+      <div id="content" on-tap="_stopPropagation">
+        <paper-input-rename id="title" value="{{title}}"></paper-input-rename>
+        <paper-icon-button icon="[[icon]]" on-tap="_secondaryActionTaped"></paper-icon-button>
+      </div>
+    </iron-image>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'paper-tile-rename',
+
+    properties: {
+      title: String,
+      
+      footerContent: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+
+      img: String,
+
+      secondActionOnLeft: {
+        type: Boolean,
+        value: false
+      },
+
+      secondActionIcon: String,
+    },
+
+    _secondaryActionTaped: function(e) {
+      this.fire('secondary-action');
+    },
+
+    _primaryActionTaped: function() {
+      this.fire('primary-action');
+    },
+
+    _stopPropagation: function(e) {
+      e.stopPropagation();
+    }
+  });
+
+</script>
