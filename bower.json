@@ -1,10 +1,10 @@
 {
   "name": "paper-tile-rename",
-  "version": "1.0.3",
+  "version": "1.0.0",
   "authors": [
-    "Anonymous <anonymous@example.com>"
+    "Zecat <jullienfelix@gmail.com>"
   ],
-  "description": "An element providing a solution to no problem in particular.",
+  "description": "Material tile with rename feature.",
   "keywords": [
     "web-component",
     "polymer",
@@ -12,7 +12,7 @@
   ],
   "main": "paper-tile-rename.html",
   "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "homepage": "https://github.com/Zecat/seed-element/",
   "ignore": [
     "/.*",
     "/test/"
@@ -23,7 +23,7 @@
     "iron-image": "PolymerElements/iron-image#~1.0.3",
     "paper-icon-button": "PolymerElements/paper-icon-button#~1.0.5",
     "paper-styles": "PolymerElements/paper-styles#~1.0.12",
-    "paper-input-anchor": "https://github.com/Zecat/paper-input-anchor.git#master"
+    "paper-input-rename": "Zecat/paper-input-rename"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
