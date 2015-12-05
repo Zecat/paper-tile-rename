@@ -12,7 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../iron-image/iron-image.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../paper-input/paper-input.html">
-<link rel="import" href="../paper-input-anchor/paper-input-anchor.html">
+<link rel="import" href="../paper-input-rename/paper-input-rename.html">
 <link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../polymer/polymer.html">
 
@@ -62,7 +62,7 @@ Example:
         font-weight: 500;
         font-size: 16px;
       }
-      paper-input-anchor {
+      paper-input-rename {
         @apply(--layout-flex);
         margin-left: 16px;
         --paper-input-container-input: {
@@ -77,7 +77,7 @@ Example:
     
     <iron-image src="[[img]]" sizing="cover" on-tap="_primaryActionTaped">
       <div id="content" on-tap="_stopPropagation">
-        <paper-input-anchor id="title" value="{{title}}"></paper-input-anchor>
+        <paper-input-rename id="title" value="{{title}}"></paper-input-rename>
         <paper-icon-button icon="[[icon]]" on-tap="_secondaryActionTaped"></paper-icon-button>
       </div>
     </iron-image>
@@ -112,11 +112,11 @@ Example:
     },
 
     _secondaryActionTaped: function(e) {
-      this.fire('tap-secondary-action');
+      this.fire('secondary-action');
     },
 
     _primaryActionTaped: function() {
-      this.fire('tap-primary-action');
+      this.fire('primary-action');
     },
 
     _stopPropagation: function(e) {
