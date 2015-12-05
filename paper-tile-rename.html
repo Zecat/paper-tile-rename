@@ -37,10 +37,11 @@ Example:
         box-sizing: border-box;
         @apply(--paper-font-common-base);
         cursor: pointer;
+        width: var(--paper-tile-rename-width, 180px);
+        height: var(--paper-tile-rename-height, 180px);
       }
       iron-image {
-        width: 180px;
-        height: 180px;
+        @apply(--layout-fit);
       }
       :host[footer-content] iron-image {
         @apply(--layout-vertical);
